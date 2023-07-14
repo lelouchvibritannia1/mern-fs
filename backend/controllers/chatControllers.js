@@ -30,7 +30,7 @@ const accessChats = asyncHandler(async (req, res) => {
     } else {
         var chatData = {
             chatName: "sender",
-            isGrupChat: false,
+            isGroupChat: false,
             users: [req.user._id, userId],
         };
 
@@ -42,7 +42,7 @@ const accessChats = asyncHandler(async (req, res) => {
                 "-password"
             );
 
-            res.status(200).send(fullChat);
+            res.status(200).json(fullChat);
         } catch (error) {
             res.status(401);
             throw new Error(error.message);

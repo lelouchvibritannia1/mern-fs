@@ -22,6 +22,7 @@ const MyChats = () => {
 
             const { data } = await axios.get("/api/chat", config);
             setChats(data);
+
         } catch (error) {
             toast({
                 title: "Error occured. Failed to load the search",
@@ -30,9 +31,8 @@ const MyChats = () => {
                 isClosable: true,
                 position: "bottom-left",
             });
-
         }
-    }
+    };
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userinfo")));
         fetchChats();
@@ -77,8 +77,28 @@ const MyChats = () => {
                 overflowY={"hidden"}
             >
                 {chats ? (
+
                     <Stack overflowY="scroll">
                         {
+                            // chats.map((chat) => (
+                            //     <Box
+                            //         onClick={() => setSelectedChat(chat)}
+                            //         cursor="pointer"
+                            //         bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+                            //         color={selectedChat === chat ? "white" : "black"}
+                            //         px={3}
+                            //         py={2}
+                            //         borderRadius={"lg"}
+                            //         key={chat._id}
+                            //     >
+                            //         <Text>
+                            //             {!chat.isGroupChat ?
+                            //                 getSender(loggedUser, chat.users)
+                            //                 : chat.chatName}
+                            //         </Text>
+                            //     </Box>
+                            //))
+
                             chats.map((chat) => (
                                 <Box
                                     onClick={() => setSelectedChat(chat)}
@@ -87,16 +107,18 @@ const MyChats = () => {
                                     color={selectedChat === chat ? "white" : "black"}
                                     px={3}
                                     py={2}
-                                    borderRadius={"1g"}
+                                    borderRadius="lg"
                                     key={chat._id}
                                 >
                                     <Text>
-                                        {!chat.isGroupChat ?
-                                            getSender(loggedUser, chat.users)
+                                        {!chat.isGroupChat
+                                            ? getSender(loggedUser, chat.users)
                                             : chat.chatName}
                                     </Text>
+
                                 </Box>
                             ))
+
                         }
 
                     </Stack>
