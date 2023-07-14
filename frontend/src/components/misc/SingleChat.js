@@ -1,13 +1,93 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider';
-import { Box, IconButton, Text } from '@chakra-ui/react';
+import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../config/ChatLogic';
 import ProfileModal from './ProfileModal';
 import UpdateGroupChatModal from './UpdateGroupChatModal';
+import axios from 'axios';
 
 const SingleChat = () => {
     const { user, selectedChat, setSelectedChat } = ChatState();
+
+    const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [newMessage, setNewMessage] = useState();
+
+    const toast = useToast();
+
+    const fetchMessages = async () => {
+        if (!selectedChat) return;
+
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${user.token}`,
+                }
+            }
+
+            setLoading(true);
+            const { data } = await axios.get(`/api/message/${selectedChat._id}`, config);
+            console.log(messages);
+            setMessages(data);
+            setLoading(false);
+        } catch (error) {
+
+            toast({
+                title: "Error Occured.",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: "true",
+                position: "bottom"
+            });
+            return;
+        }
+    }
+
+    useEffect(() => {
+        fetchMessages();
+        // console.log(messages);
+    }, [selectedChat]);
+
+    const sendMessage = async (event) => {
+        if (event.key === "Enter" && newMessage) {
+            try {
+                const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                        Authorization: `Bearer ${user.token}`,
+                    }
+                }
+
+                setNewMessage("");
+                const { data } = await axios.post("/api/message", {
+                    content: newMessage,
+                    chatId: selectedChat._id,
+                }, config);
+                // console.log(data);
+                setMessages([...messages, data]);
+            } catch (error) {
+                toast({
+                    title: "Error Occured.",
+                    description: error.response.data.message,
+                    status: "error",
+                    duration: 5000,
+                    isClosable: "true",
+                    position: "bottom"
+                });
+                return;
+            }
+        }
+    }
+    const typingHandler = (ev) => {
+        setNewMessage(ev.target.value);
+
+        //Typing indicator Logic
+    }
+
+
     const [fetchAgain, setFetchAgain] = useState();
     return (
         <>{
@@ -56,7 +136,29 @@ const SingleChat = () => {
                         borderRadius="lg"
                         overflowY="hidden"
                     >
+                        {loading ? (
+                            <Spinner
+                                size="xl"
+                                w={20}
+                                h={20}
+                                alignSelf={"center"}
+                                margin={"auto"}
+                            />
+                        ) : (
+                            <div>
+                                {/* Messages */}
+                            </div>
+                        )}
 
+                        <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+                            <Input
+                                variant="filled"
+                                bg="#E0E0E0"
+                                placeholder='Enter a message'
+                                onChange={typingHandler}
+                                value={newMessage}
+                            />
+                        </FormControl>
                     </Box>
 
                 </>
