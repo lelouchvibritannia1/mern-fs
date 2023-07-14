@@ -23,7 +23,7 @@ import axios from 'axios'
 import UserListItem from '../UserAvatar/UserListItem'
 
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchChats }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { user, selectedChat, setSelectedChat } = ChatState();
@@ -116,6 +116,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
       );
 
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
+      fetchChats();
       setFetchAgain(!fetchAgain);
       setLoading(false);
     } catch (error) {

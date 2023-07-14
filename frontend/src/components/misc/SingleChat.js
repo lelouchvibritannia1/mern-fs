@@ -6,6 +6,8 @@ import { getSender, getSenderFull } from '../config/ChatLogic';
 import ProfileModal from './ProfileModal';
 import UpdateGroupChatModal from './UpdateGroupChatModal';
 import axios from 'axios';
+import "./styles.css"
+import ScrollableChats from './ScrollableChats';
 
 const SingleChat = () => {
     const { user, selectedChat, setSelectedChat } = ChatState();
@@ -119,6 +121,7 @@ const SingleChat = () => {
                                 <UpdateGroupChatModal
                                     fetchAgain={fetchAgain}
                                     setFetchAgain={setFetchAgain}
+                                    fetchMessages={fetchMessages}
                                 />
 
 
@@ -145,8 +148,8 @@ const SingleChat = () => {
                                 margin={"auto"}
                             />
                         ) : (
-                            <div>
-                                {/* Messages */}
+                            <div className="messages">
+                                <ScrollableChats messages={messages} />
                             </div>
                         )}
 
