@@ -17,7 +17,7 @@ var socket, selectedChatCompare;
 
 
 const SingleChat = () => {
-    const { user, selectedChat, setSelectedChat } = ChatState();
+    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
 
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -59,7 +59,7 @@ const SingleChat = () => {
 
             setLoading(true);
             const { data } = await axios.get(`/api/message/${selectedChat._id}`, config);
-            console.log(messages);
+            // console.log(messages);
             setMessages(data);
             setLoading(false);
 
@@ -86,12 +86,19 @@ const SingleChat = () => {
     useEffect(() => {
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
-
+                if (!notification.includes(newMessageReceived)) {
+                    setNotification([newMessageReceived, ...notification]);
+                    setFetchAgain(!fetchAgain);
+                }
             } else {
                 setMessages([...messages, newMessageReceived]);
             }
         })
     })
+
+
+    console.log(notification, "----------");
+
 
     const sendMessage = async (event) => {
         if (event.key === "Enter" && newMessage) {

@@ -8,10 +8,13 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
 import ChatLoading from './ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
+import { getSender } from "../config/ChatLogic"
+
+import NotificationBadge, { Effect } from 'react-notification-badge'
 
 const SideDrawer = () => {
 
-    const { user, setSelectedChat, chats, setChats } = ChatState();
+    const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -122,8 +125,25 @@ const SideDrawer = () => {
                 <div>
                     <Menu p={1}>
                         <MenuButton>
+                            <NotificationBadge
+                                count={notification.length}
+                                effect={Effect.SCALE}
+                            />
                             <BellIcon fontsize="1xl" m={1} />
                         </MenuButton>
+                        <MenuList pl={2}>
+                            {!notification.length && "No New Messages"}
+                            {notification.map((n) => (
+                                <MenuItem key={n._id}
+                                    onClick={() => {
+                                        setSelectedChat(n.chat);
+                                        setNotification(notification.filter((notif) => n !== notif));
+                                    }}>
+                                    {n.chat.isGroupChat ? `New Message in ${n.chat.chatName}`
+                                        : `New Message from ${getSender(user, n.chat.users)}`}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
                     </Menu>
                     <Menu>
                         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
