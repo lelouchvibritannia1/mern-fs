@@ -108,6 +108,8 @@ const SideDrawer = () => {
                 w="100%"
                 p="5px 10px 5px 10px"
                 borderWidth="5px"
+                borderRadius={"lg"}
+
             >
                 <Tooltip
                     label="Search User to chat"

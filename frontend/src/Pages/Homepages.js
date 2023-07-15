@@ -20,20 +20,20 @@ const Homepage = () => {
     return (
         <Container maxW='xl' centerContent>
             <Box
-                d='flex'
+                display='flex'
                 justifyContent="center"
                 padding={3}
                 bg={"white"}
                 w="100%"
                 m="40px 0 15px 0"
-                borderRadius="1g"
+                borderRadius="lg"
                 borderWidth="1px"
             >
                 <Text fontSize='4xl' color={"black"} >
                     Web Chat
                 </Text>
             </Box>
-            <Box bg={"white"} w="100%" p={4} borderRadius={"1g"} borderWidth={"1px"}>
+            <Box bg={"white"} w="100%" p={4} borderRadius={"lg"} borderWidth={"1px"}>
                 <Tabs variant='soft-rounded' colorScheme='green'>
                     <TabList mb="1em">
                         <Tab width="50%">Login</Tab>
