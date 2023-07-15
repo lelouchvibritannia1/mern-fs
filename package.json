@@ -20,6 +20,7 @@
     "express-async-handler": "^1.2.0",
     "framer-motion": "^10.12.18",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.3.2"
+    "mongoose": "^7.3.2",
+    "socket.io": "^4.7.1"
   }
 }
